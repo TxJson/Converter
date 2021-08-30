@@ -10,8 +10,9 @@ def getPath(*args):
 def createIfNotExists(path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
-def writeToFile(path, txt):
+def writeToFile(path, txt = None):
     createIfNotExists(path)
-    file = open(path, 'w')
-    file.write(txt)
-    file.close()
+    if txt != None:
+        file = open(path, 'w')
+        file.write(txt)
+        file.close()

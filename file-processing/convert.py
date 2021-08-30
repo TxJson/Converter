@@ -9,8 +9,16 @@ from datetime import datetime
 import loglib as log
 import filelib as fb
 
-filesPath = os.getcwd() + '/img'
-saveDir = os.getcwd() + '/converted-pdfs'
+
+passedArgs = sys.argv[slice(1, len(sys.argv))]
+
+filesPath = passedArgs[0] or os.getcwd() + '/img'
+saveDir = passedArgs[1] or os.getcwd() + '/converted-pdfs'
+
+fb.createIfNotExists(filesPath)
+fb.createIfNotExists(saveDir)
+log.trace(f'File Path => {filesPath}')
+log.trace(f'Save Path => {saveDir}')
 
 def getFiles():
     files = []
