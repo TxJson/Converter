@@ -1,6 +1,0 @@
-{
-    "FILENAME": "logfile",
-    "DIRECTORY": "log/server",
-    "TYPE": "dateFile",
-    "LOGGER_LEVEL": "trace"
-  }
