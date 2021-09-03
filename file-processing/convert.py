@@ -1,6 +1,3 @@
-import os
-import sys
-from os import walk
 from os import path
 from PIL import Image
 from datetime import datetime
@@ -8,24 +5,7 @@ from datetime import datetime
 # Libraries
 import loglib as log
 import filelib as fb
-
-
-passedArgs = sys.argv[slice(1, len(sys.argv))]
-
-filesPath = passedArgs[0] or os.getcwd() + '/img'
-saveDir = passedArgs[1] or os.getcwd() + '/converted-pdfs'
-
-fb.createIfNotExists(filesPath)
-fb.createIfNotExists(saveDir)
-log.trace(f'File Path => {filesPath}')
-log.trace(f'Save Path => {saveDir}')
-
-def getFiles():
-    files = []
-    for (path, dirNames, fileNames) in walk(filesPath):
-        files.extend(fileNames)
-        break
-    return files
+import cli as cli
 
 def convert(files):
     try:
@@ -45,8 +25,22 @@ def convert(files):
         log.error('Conversion failed')
         pass
 
-if path.exists(filesPath):
-    paths = getFiles()
-    convert(paths)
+
+userPath = cli.getPath()
+passedArgs = cli.getArgs()
+
+if len(passedArgs) >= 2:
+    filePath = f'{userPath}/{passedArgs[0]}'
+    saveDir = f'{userPath}/{passedArgs[1]}'
+
+    fb.createPathsIfNotExist(filePath, saveDir)
+    log.trace(f'File Path => {filePath}')
+    # log.trace(f'Save Path => {saveDir}')
+
+    if path.exists(filePath) and path.exists(saveDir):
+        paths = fb.getFiles()
+        convert(paths)
+    else:
+        log.error(f'Failed to find path [{filePath}].')
 else:
-    log.error('Failed to find path ' + filesPath)
+    log.error(f'Missing arguments, only {len(passedArgs)} supplied.')
